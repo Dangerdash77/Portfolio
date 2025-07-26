@@ -49,36 +49,44 @@ class GameDevPortfolio {
       {
         category: "Game Engines",
         items: [
-          {name: "Unity 3D", level: 95, icon: "🎮"},
-          {name: "Unreal Engine 5", level: 85, icon: "🔧"},
-          {name: "Godot", level: 70, icon: "⚙️"}
+          { name: "Unity", level: 60, icon: "🧩" },
+          { name: "Unreal Engine 5", level: 90, icon: "🌀" },
+          { name: "Godot", level: 30, icon: "🤖" },
+          { name: "Gamemaker", level: 30, icon: "🎲" }
         ]
       },
       {
         category: "Programming",
         items: [
-          {name: "C#", level: 95, icon: "💻"},
-          {name: "C++", level: 80, icon: "🔢"},
-          {name: "JavaScript", level: 75, icon: "📜"},
-          {name: "Python", level: 70, icon: "🐍"}
+          { name: "C++", level: 95, icon: "➕➕" },
+          { name: "C#", level: 60, icon: "🟣" },
+          { name: "JavaScript", level: 75, icon: "✨" },
+          { name: "Java", level: 40, icon: "☕" },
+          { name: "Python", level: 40, icon: "🐍" },
+          { name: "C", level: 40, icon: "🅲" },
+          { name: "SQL", level: 40, icon: "🗄️" }
         ]
       },
       {
-        category: "3D Software",
+        category: "Softwares",
         items: [
-          {name: "Blender", level: 90, icon: "🎨"},
-          {name: "Maya", level: 75, icon: "🏗️"},
-          {name: "Substance Painter", level: 80, icon: "🖌️"}
-        ]
-      },
-      {
-        category: "Design Tools",
-        items: [
-          {name: "Photoshop", level: 85, icon: "🖼️"},
-          {name: "Illustrator", level: 70, icon: "✏️"},
-          {name: "Aseprite", level: 90, icon: "🎯"}
+          { name: "VSC", level: 90, icon: "🖊️" },
+          { name: "VSC2022", level: 75, icon: "🏛️" },
+          { name: "GitHub", level: 80, icon: "🐙" },
+          { name: "MongoDB", level: 90, icon: "🍃" },
+          { name: "AWS Cloud", level: 90, icon: "☁️" },
+          { name: "Blender", level: 90, icon: "🌀" },
+          { name: "Substance Painter", level: 90, icon: "🎨" }
         ]
       }
+      // {
+      //   category: "Design Tools",
+      //   items: [
+      //     {name: "Photoshop", level: 85, icon: "🖼️"},
+      //     {name: "Illustrator", level: 70, icon: "✏️"},
+      //     {name: "Aseprite", level: 90, icon: "🎯"}
+      //   ]
+      // }
     ];
 
     this.scene = null;
@@ -87,13 +95,13 @@ class GameDevPortfolio {
     this.cube = null;
     this.animationId = null;
     this.cubeParticles = null;
-    
+
     this.init();
   }
 
   init() {
     console.log('Initializing portfolio...');
-    
+
     // Initialize core features first
     this.setupNavigation();
     this.setupTheme();
@@ -107,7 +115,7 @@ class GameDevPortfolio {
     this.setupScrollAnimations();
     this.setupBackToTop();
     this.updateYear();
-    
+
     // Initialize Three.js after a delay to ensure library is loaded
     setTimeout(() => {
       this.setupThreeJS();
@@ -138,15 +146,15 @@ class GameDevPortfolio {
         const href = link.getAttribute('href');
         const targetId = href?.substring(1); // Remove the # symbol
         const target = document.getElementById(targetId);
-        
+
         console.log('Navigation clicked:', href, 'Target found:', !!target);
-        
+
         if (target) {
           // Close mobile menu
           if (navMenu) navMenu.classList.remove('open');
-          
+
           // Smooth scroll to target
-          target.scrollIntoView({ 
+          target.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
@@ -161,9 +169,9 @@ class GameDevPortfolio {
         const targetSelector = btn.dataset.scroll;
         const target = document.querySelector(targetSelector);
         console.log('CTA button clicked:', targetSelector, 'Target found:', !!target);
-        
+
         if (target) {
-          target.scrollIntoView({ 
+          target.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
@@ -178,13 +186,13 @@ class GameDevPortfolio {
   setupTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle?.querySelector('.theme-icon');
-    
+
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
         const html = document.documentElement;
         const currentScheme = html.getAttribute('data-color-scheme');
         const newScheme = currentScheme === 'dark' ? 'light' : 'dark';
-        
+
         html.setAttribute('data-color-scheme', newScheme);
         if (themeIcon) {
           themeIcon.textContent = newScheme === 'dark' ? '🌙' : '☀️';
@@ -216,12 +224,12 @@ class GameDevPortfolio {
   // Enhanced Three.js Setup with better error handling
   setupThreeJS() {
     console.log('Setting up Three.js...');
-    
+
     if (typeof THREE === 'undefined') {
       console.warn('Three.js not available, skipping 3D features');
       return;
     }
-    
+
     const canvas = document.getElementById('hero-canvas');
     if (!canvas) {
       console.warn('Hero canvas not found');
@@ -232,24 +240,24 @@ class GameDevPortfolio {
       // Scene setup
       this.scene = new THREE.Scene();
       this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      this.renderer = new THREE.WebGLRenderer({ 
-        canvas, 
-        alpha: true, 
-        antialias: true 
+      this.renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true
       });
-      
+
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
       // Create wireframe cube
       const geometry = new THREE.BoxGeometry(2, 2, 2);
       const edges = new THREE.EdgesGeometry(geometry);
-      const material = new THREE.LineBasicMaterial({ 
+      const material = new THREE.LineBasicMaterial({
         color: 0x00f5ff,
         transparent: true,
         opacity: 0.8
       });
-      
+
       this.cube = new THREE.LineSegments(edges, material);
       this.scene.add(this.cube);
 
@@ -261,11 +269,11 @@ class GameDevPortfolio {
       // Mouse interaction variables
       let mouseX = 0, mouseY = 0;
       let targetRotationX = 0, targetRotationY = 0;
-      
+
       document.addEventListener('mousemove', (event) => {
         mouseX = (event.clientX / window.innerWidth) * 2 - 1;
         mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-        
+
         targetRotationX = mouseY * 0.3;
         targetRotationY = mouseX * 0.3;
       });
@@ -273,20 +281,20 @@ class GameDevPortfolio {
       // Animation loop
       const animate = () => {
         this.animationId = requestAnimationFrame(animate);
-        
+
         if (this.cube) {
           // Base rotation
           this.cube.rotation.x += 0.005;
           this.cube.rotation.y += 0.01;
-          
+
           // Smooth mouse follow effect
           this.cube.rotation.x += (targetRotationX - this.cube.rotation.x) * 0.05;
           this.cube.rotation.y += (targetRotationY - this.cube.rotation.y) * 0.05;
         }
-        
+
         // Update particles
         this.updateCubeParticles();
-        
+
         this.renderer.render(this.scene, this.camera);
       };
 
@@ -303,7 +311,7 @@ class GameDevPortfolio {
 
       window.addEventListener('resize', handleResize);
       console.log('Three.js setup successful');
-      
+
     } catch (error) {
       console.error('Three.js setup failed:', error);
     }
@@ -311,7 +319,7 @@ class GameDevPortfolio {
 
   createCubeParticles() {
     if (!this.scene) return;
-    
+
     try {
       const particleGeometry = new THREE.BufferGeometry();
       const particleCount = 150;
@@ -322,7 +330,7 @@ class GameDevPortfolio {
       }
 
       particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      
+
       const particleMaterial = new THREE.PointsMaterial({
         color: 0x00f5ff,
         size: 0.03,
@@ -369,7 +377,7 @@ class GameDevPortfolio {
         animation: float ${3 + Math.random() * 4}s ease-in-out infinite;
         animation-delay: ${Math.random() * 2}s;
       `;
-      
+
       particlesContainer.appendChild(particle);
     }
 
@@ -404,7 +412,7 @@ class GameDevPortfolio {
       projectCard.className = 'project-card';
       projectCard.dataset.category = project.category;
       projectCard.style.animationDelay = `${index * 0.1}s`;
-      
+
       projectCard.innerHTML = `
         <img src="${project.image}" alt="${project.title}" class="project-image" loading="lazy" 
              onerror="this.style.background='linear-gradient(45deg, #00f5ff, #32ff32)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.innerHTML='🎮';" />
@@ -423,11 +431,11 @@ class GameDevPortfolio {
         console.log('Project card clicked:', project.title);
         this.openProjectModal(project);
       });
-      
+
       projectCard.style.cursor = 'pointer';
       projectCard.setAttribute('tabindex', '0');
       projectCard.setAttribute('role', 'button');
-      
+
       // Add keyboard support
       projectCard.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -445,17 +453,17 @@ class GameDevPortfolio {
   // Project Filters
   setupProjectFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
-    
+
     filterButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const filter = btn.dataset.filter;
         console.log('Filter clicked:', filter);
-        
+
         // Update active button
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        
+
         // Filter projects
         this.filterProjects(filter);
       });
@@ -464,10 +472,10 @@ class GameDevPortfolio {
 
   filterProjects(filter) {
     const projectCards = document.querySelectorAll('.project-card');
-    
+
     projectCards.forEach((card, index) => {
       const shouldShow = filter === 'all' || card.dataset.category === filter;
-      
+
       if (shouldShow) {
         card.style.display = 'block';
         card.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s both`;
@@ -493,7 +501,7 @@ class GameDevPortfolio {
       const categoryDiv = document.createElement('div');
       categoryDiv.className = 'skill-category';
       categoryDiv.style.animationDelay = `${index * 0.1}s`;
-      
+
       categoryDiv.innerHTML = `
         <h3>${category.category}</h3>
         ${category.items.map(skill => `
@@ -506,7 +514,7 @@ class GameDevPortfolio {
           </div>
         `).join('')}
       `;
-      
+
       skillsGrid.appendChild(categoryDiv);
     });
 
@@ -531,7 +539,7 @@ class GameDevPortfolio {
         this.closeProjectModal();
       });
     }
-    
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
         this.closeProjectModal();
@@ -564,13 +572,13 @@ class GameDevPortfolio {
       image.alt = project.title;
     }
     if (description) description.textContent = project.description;
-    
+
     if (technologies) {
       technologies.innerHTML = project.technologies
         .map(tech => `<span class="tech-badge">${tech}</span>`)
         .join('');
     }
-    
+
     if (liveBtn) {
       liveBtn.href = project.live;
       liveBtn.setAttribute('target', '_blank');
@@ -583,7 +591,7 @@ class GameDevPortfolio {
     // Show modal
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    
+
     // Focus trap
     setTimeout(() => {
       const firstFocusable = modal.querySelector('button, a, input, textarea, select, [tabindex]:not([tabindex="-1"])');
@@ -611,12 +619,12 @@ class GameDevPortfolio {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       console.log('Contact form submitted');
-      
+
       const submitBtn = form.querySelector('button[type="submit"]');
       const submitText = document.getElementById('submit-text');
       const submitLoader = document.getElementById('submit-loader');
       const formStatus = document.getElementById('form-status');
-      
+
       // Show loading state
       if (submitText) {
         submitText.classList.add('hidden');
@@ -630,12 +638,12 @@ class GameDevPortfolio {
         submitBtn.disabled = true;
         console.log('Submit button disabled');
       }
-      
+
       // Simulate form submission
       try {
         console.log('Simulating form submission...');
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
         // Show success message
         if (formStatus) {
           formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
@@ -643,12 +651,12 @@ class GameDevPortfolio {
           formStatus.classList.remove('hidden');
           console.log('Success message shown');
         }
-        
+
         form.reset();
-        
+
       } catch (error) {
         console.error('Form submission error:', error);
-        
+
         // Show error message
         if (formStatus) {
           formStatus.textContent = 'Failed to send message. Please try again.';
@@ -669,7 +677,7 @@ class GameDevPortfolio {
           submitBtn.disabled = false;
           console.log('Submit button enabled');
         }
-        
+
         // Hide status after 5 seconds
         setTimeout(() => {
           if (formStatus) {
@@ -707,7 +715,7 @@ class GameDevPortfolio {
   // Back to Top
   setupBackToTop() {
     const backToTopBtn = document.getElementById('back-to-top');
-    
+
     if (backToTopBtn) {
       backToTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
