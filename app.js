@@ -199,7 +199,7 @@ class GameDevPortfolio {
     const typewriterElement = document.querySelector('.typewriter');
     if (!typewriterElement) return;
 
-    const text = typewriterElement.dataset.text || "Hi, I'm Alex Chen";
+    const text = typewriterElement.dataset.text || "Hi, I'm Manav Kalola";
     let index = 0;
 
     const typeText = () => {
