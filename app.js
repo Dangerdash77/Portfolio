@@ -1,49 +1,98 @@
 // Game Developer Portfolio - Interactive Features & Three.js (FINAL FIX)
+// import IMGwhiterabbit from './Assets/white-rabbit.jpg';
+// import IMGsolarfarmlocator from './Assets/Solarfarmlocator.png';
+// import IMGANB from './Assets/ANB.png';
+// import IMGhosteller from './Assets/.jpg';
+// import IMGsmartparking from './Assets/Smartparkingsystem.png';
+// import IMGclink from './Assets/Clink.png';
+// import IMGmines from './Assets/Mines.png';
+// import IMGreflex from './Assets/white-rabbit.jpg';
+// import IMGchess from './Assets/.jpg';
 
 class GameDevPortfolio {
   constructor() {
     this.projectsData = [
       {
         id: 1,
-        title: "Neon Runner",
-        description: "A fast-paced 3D endless runner game set in a cyberpunk world. Features dynamic level generation, particle effects, and intuitive mobile controls.",
-        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        technologies: ["Unity", "C#", "Blender", "Photoshop"],
-        category: "Unity",
-        github: "https://github.com/alexchen-gamedev/neon-runner",
-        live: "https://example.com/neon-runner"
+        title: "White Rabbit",
+        description: "Psychological horror game made in UE5 focused on exploration, visual storytelling, and audio design. Level layout design and implemented gameplay systems using Blueprints.",
+        image: "https://images.unsplash.com/photo-1613114926807-b86b1cc42692?auto=format&fit=crop&w=1470&q=80",
+        technologies: ["Unreal Engine 5", "Blueprints", "Game Design", "UI/UX", "Level Design", "System Design", "GitHub"],
+        category: "Unreal Engine",
       },
       {
         id: 2,
-        title: "Space Colony Simulator",
-        description: "A complex strategy simulation game where players build and manage space colonies. Features advanced AI systems, resource management, and base building mechanics.",
-        image: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80",
-        technologies: ["Unreal Engine 5", "C++", "Blueprint", "3ds Max"],
-        category: "Unreal",
-        github: "https://github.com/alexchen-gamedev/space-colony",
-        live: "https://example.com/space-colony"
+        title: "Solar Farm Locator",
+        description: "A MERN-based web app that fetches real-time solar irradiance data using multiple APIs. Helps users locate optimal regions for solar installations by entering city names or coordinates.",
+        image: 'assets/Solarfarmlocator.png',
+        technologies: ["JavaScript", "HTML", "CSS", "API", "React", "Node"],
+        category: "Web development",
+        github: "https://github.com/Dangerdash77/Solar-Farm-Locator",
+        live: "https://solar-farm-locator-1.onrender.com/"
       },
       {
         id: 3,
-        title: "Mystic Realms",
-        description: "A 2D RPG adventure game with rich storytelling, custom inventory system, and engaging combat mechanics. Features hand-crafted pixel art environments.",
-        image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        technologies: ["Unity", "C#", "Aseprite", "Tiled"],
-        category: "Unity",
-        github: "https://github.com/alexchen-gamedev/mystic-realms",
-        live: "https://example.com/mystic-realms"
+        title: "ANB Industries Website",
+        description: "A full-stack industrial website with admin panel, login/signup authentication, product catalog management, and dynamic quote system. Deployed on Render with mobile-first design.",
+        image: 'assets/ANB.png',
+        technologies: ["JavaScript", "HTML", "CSS", "API", "MERN", "Render"],
+        category: "Web development",
+        github: "https://github.com/Dangerdash77/ANB_Temp",
+        live: "https://www.anbindustries.com/"
       },
       {
         id: 4,
-        title: "VR Physics Playground",
-        description: "An immersive VR experience showcasing realistic physics interactions. Features hand tracking, spatial audio, and intuitive VR controls.",
-        image: "https://images.unsplash.com/photo-1592478411213-6153e4ebc696?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1412&q=80",
-        technologies: ["Unity", "C#", "SteamVR", "Oculus SDK"],
-        category: "VR",
-        github: "https://github.com/alexchen-gamedev/vr-physics",
-        live: "https://example.com/vr-physics"
-      }
+        title: "Hosteller",
+        description: "A horror exploration game developed in Unreal Engine 5. Designed spooky environments and scripted gameplay using Blueprints to create an immersive narrative experience set in a haunted hostel.",
+        image: "https://images.unsplash.com/photo-1613114926807-b86b1cc42692?auto=format&fit=crop&w=1470&q=80",
+        technologies: ["Unreal Engine 5", "Blueprints", "Blender", "UI/UX", "Level Design", "GitHub"],
+        category: "Unreal Engine",
+        github: "", // 🔄 Add GitHub link if available
+        live: ""     // 🔄 Add playable link or trailer if available
+      },
+      {
+        id: 5,
+        title: "Smart Parking Capacity Tracker",
+        description: "IoT-based prototype using Arduino Uno and infrared sensors to monitor and display real-time parking slot availability. Designed embedded logic in C and serial data transmission.",
+        image: 'assets/Smartparkingsystem.png',
+        technologies: ["Arduino Uno", "Embedded C", "Sensors"],
+        category: "Others"
+      },
+      {
+        id: 6,
+        title: "Clink",
+        description: "A 2D puzzle-platformer created in 48 hours for the WTF x IGDC Game Jam 2024. I worked as the Level Designer, crafting puzzle layouts and balancing progression for an engaging player experience. Built in Unity and published on Itch.io.",
+        image: 'assets/Clink.png',
+        technologies: ["Unity", "Level Design", "UI/UX", "Game Jam"],
+        category: "Unity",
+        live: "https://dasaniket15.itch.io/clink"
+      },
+      {
+        id: 7,
+        title: "Mines Game (Luck-based)",
+        description: "A UE5 Blueprint-based game inspired by Minesweeper with randomized tile interactions. Designed logic for tile uncovering and created a visually intuitive grid-based UI.",
+        image: 'assets/Mines.png',
+        technologies: ["Unreal Engine 5", "Blueprints", "UI/UX"],
+        category: "Unreal Engine"
+      },
+      {
+        id: 8,
+        title: "Reflex Game",
+        description: "A fast-paced tapping game built in UE5 to test visual reflexes. Designed progressive difficulty logic and responsive UI using Blueprints. Ideal for mobile playtesting scenarios.",
+        image: "https://images.unsplash.com/photo-1581090129431-75b42bafc218?auto=format&fit=crop&w=1470&q=80",
+        technologies: ["Unreal Engine 5", "Blueprints", "UI/UX"],
+        category: "Unreal Engine"
+      },
+      {
+        id: 9,
+        title: "Chess 3D",
+        description: "Turn-based 3D chess game in Unreal Engine using C++ logic for piece rules, board validation. Developed touch input system for mobile gameplay.",
+        image: "https://images.unsplash.com/photo-1581090129431-75b42bafc218?auto=format&fit=crop&w=1470&q=80",
+        technologies: ["Unreal Engine 5", "C++", "3D modeling"],
+        category: "Unreal Engine"
+      },
     ];
+
 
     this.skillsData = [
       {
@@ -79,14 +128,6 @@ class GameDevPortfolio {
           { name: "Substance Painter", level: 90, icon: "🎨" }
         ]
       }
-      // {
-      //   category: "Design Tools",
-      //   items: [
-      //     {name: "Photoshop", level: 85, icon: "🖼️"},
-      //     {name: "Illustrator", level: 70, icon: "✏️"},
-      //     {name: "Aseprite", level: 90, icon: "🎯"}
-      //   ]
-      // }
     ];
 
     this.scene = null;
@@ -578,15 +619,35 @@ class GameDevPortfolio {
         .map(tech => `<span class="tech-badge">${tech}</span>`)
         .join('');
     }
-
+    // Conditional rendering for Live button
     if (liveBtn) {
-      liveBtn.href = project.live;
-      liveBtn.setAttribute('target', '_blank');
+      if (project.live) {
+        liveBtn.href = project.live;
+        liveBtn.setAttribute('target', '_blank');
+        liveBtn.classList.remove('hidden');
+      } else {
+        liveBtn.classList.add('hidden');
+      }
     }
+
+    // Conditional rendering for GitHub button
     if (githubBtn) {
-      githubBtn.href = project.github;
-      githubBtn.setAttribute('target', '_blank');
+      if (project.github) {
+        githubBtn.href = project.github;
+        githubBtn.setAttribute('target', '_blank');
+        githubBtn.classList.remove('hidden');
+      } else {
+        githubBtn.classList.add('hidden');
+      }
     }
+    // if (liveBtn) {
+    //   liveBtn.href = project.live;
+    //   liveBtn.setAttribute('target', '_blank');
+    // }
+    // if (githubBtn) {
+    //   githubBtn.href = project.github;
+    //   githubBtn.setAttribute('target', '_blank');
+    // }
 
     // Show modal
     modal.classList.remove('hidden');
