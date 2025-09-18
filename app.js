@@ -65,6 +65,7 @@ class GameDevPortfolio {
         image: 'assets/Clink.png',
         technologies: ["Unity", "Level Design", "UI/UX", "Game Jam"],
         category: "Unity",
+        github: "https://github.com/shunphoenix55/Snake-Chain-IGDC-Jam",
         live: "https://dasaniket15.itch.io/clink"
       },
       {
