@@ -34,7 +34,7 @@ class GameDevPortfolio {
         id: 3,
         title: "ANB Industries Website",
         description: "A full-stack industrial website with admin panel, login/signup authentication, product catalog management, and dynamic quote system. Deployed on Render with mobile-first design.",
-        image: 'assets/ANB.png',
+        image: './assets/ANB.png',
         technologies: ["JavaScript", "HTML", "CSS", "API", "MERN", "Render"],
         category: "Web development",
         github: "https://github.com/Dangerdash77/ANB_Temp",
@@ -62,7 +62,7 @@ class GameDevPortfolio {
         id: 6,
         title: "Clink",
         description: "A 2D puzzle-platformer created in 48 hours for the WTF x IGDC Game Jam 2024. I worked as the Level Designer, crafting puzzle layouts and balancing progression for an engaging player experience. Built in Unity and published on Itch.io.",
-        image: 'assets/Clink.png',
+        image: './assets/Clink.png',
         technologies: ["Unity", "Level Design", "UI/UX", "Game Jam"],
         category: "Unity",
         github: "https://github.com/shunphoenix55/Snake-Chain-IGDC-Jam",
@@ -73,7 +73,7 @@ class GameDevPortfolio {
         title: "Mines Game (Luck-based)",
         description: "A UE5 Blueprint-based game inspired by Minesweeper with randomized tile interactions. Designed logic for tile uncovering and created a visually intuitive grid-based UI.",
         image: 'assets/Mines.png',
-        technologies: ["Unreal Engine 5", "Blueprints", "UI/UX"],
+        technologies: ["Unreal Engine 5", "Bslueprints", "UI/UX"],
         category: "Unreal Engine"
       },
       {
