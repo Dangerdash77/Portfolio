@@ -24,7 +24,7 @@ class GameDevPortfolio {
         id: 2,
         title: "Solar Farm Locator",
         description: "A MERN-based web app that fetches real-time solar irradiance data using multiple APIs. Helps users locate optimal regions for solar installations by entering city names or coordinates.",
-        image: 'assets/Solarfarmlocator.png',
+        image: './assets/Solarfarmlocator.png',
         technologies: ["JavaScript", "HTML", "CSS", "API", "React", "Node"],
         category: "Web development",
         github: "https://github.com/Dangerdash77/Solar-Farm-Locator",
