@@ -19,7 +19,7 @@ class GameDevPortfolio {
         image: "https://images.unsplash.com/photo-1613114926807-b86b1cc42692?auto=format&fit=crop&w=1470&q=80",
         technologies: ["Unreal Engine 5", "Blueprints", "Game Design", "UI/UX", "Level Design", "System Design", "GitHub"],
         category: "Unreal Engine",
-        video: "./Assets/White Rabbit Game Playthrough.mp4"
+        video: "https://drive.google.com/file/d/1hZT2nJyYy3p_AKd_u6y_SKUaPS0fBkp7/preview"
       },
       {
         id: 2,
@@ -745,39 +745,63 @@ class GameDevPortfolio {
     });
   }
   // ===============================
-  // Project Video Popup (Inline Player)
-  // ===============================
-  setupVideoPopup() {
-    const modal = document.getElementById("video-modal");
-    const video = document.getElementById("project-video");
-    const closeBtn = document.querySelector(".close-video");
+// Project Video Popup (Google Drive / YouTube Compatible)
+// ===============================
+setupVideoPopup() {
+  const modal = document.getElementById("video-modal");
+  const closeBtn = document.querySelector(".close-video");
+  const videoContainer = modal?.querySelector(".video-content");
 
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest(".play-video-btn");
-      if (btn) {
-        const src = btn.dataset.video;
-        if (src) {
-          video.src = src;
-          modal.style.display = "flex";
-          video.play();
-        }
-      }
-    });
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".play-video-btn");
+    if (!btn || !videoContainer) return;
 
-    closeBtn.addEventListener("click", () => {
+    const src = btn.dataset.video;
+    if (!src) return;
+
+    // Clear any previous iframe
+    videoContainer.innerHTML = "";
+
+    // Detect Google Drive or standard mp4
+    if (src.includes("drive.google.com")) {
+      // Convert to /preview if needed
+      const previewUrl = src.includes("/preview")
+        ? src
+        : src.replace("/view", "/preview");
+      const iframe = document.createElement("iframe");
+      iframe.src = previewUrl;
+      iframe.width = "100%";
+      iframe.height = "480";
+      iframe.allow = "autoplay";
+      iframe.style.border = "none";
+      videoContainer.appendChild(iframe);
+    } else {
+      // Normal MP4 support
+      const video = document.createElement("video");
+      video.src = src;
+      video.controls = true;
+      video.autoplay = true;
+      video.style.width = "100%";
+      videoContainer.appendChild(video);
+    }
+
+    modal.style.display = "flex";
+  });
+
+  // Close modal
+  closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    if (videoContainer) videoContainer.innerHTML = "";
+  });
+
+  // Close when clicking outside
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
       modal.style.display = "none";
-      video.pause();
-      video.src = "";
-    });
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.style.display = "none";
-        video.pause();
-        video.src = "";
-      }
-    });
-  }
+      if (videoContainer) videoContainer.innerHTML = "";
+    }
+  });
+}
 
   // Back to Top
   setupBackToTop() {
