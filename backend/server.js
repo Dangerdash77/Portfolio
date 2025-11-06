@@ -19,6 +19,7 @@ const PORT = process.env.PORT || 5000;
 // =============================
 app.use(express.json());
 
+// ✅ Fixed CORS Configuration
 const allowedOrigins = [
   "https://www.manavkalola.xyz",
   "https://manavkalola.xyz",
@@ -30,14 +31,23 @@ app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      console.warn(`❌ CORS blocked request from: ${origin}`);
-      return callback(new Error("CORS not allowed for this origin"));
+      // allow www and non-www variations
+      if (allowedOrigins.some((o) => origin.startsWith(o))) {
+        return callback(null, true);
+      } else {
+        console.warn(`❌ CORS blocked request from: ${origin}`);
+        return callback(new Error("CORS not allowed for this origin"));
+      }
     },
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
+    credentials: true,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200,
   })
 );
+
+// Explicit preflight handler
+app.options("*", cors());
 
 // =============================
 // MongoDB Connection
@@ -68,13 +78,13 @@ mongoose.connection.on("disconnected", () => {
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
-  secure: true, // use SSL
+  secure: true, // SSL
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // use 16-char App Password
+    pass: process.env.EMAIL_PASS, // Gmail App Password
   },
   tls: {
-    rejectUnauthorized: false, // allow self-signed on local
+    rejectUnauthorized: false,
   },
   connectionTimeout: 15000,
   greetingTimeout: 15000,
@@ -82,12 +92,9 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify SMTP setup
-transporter.verify((err, success) => {
-  if (err) {
-    console.warn("⚠️ Email Transporter Error:", err.message);
-  } else {
-    console.log("✅ Gmail SMTP Verified Successfully");
-  }
+transporter.verify((err) => {
+  if (err) console.warn("⚠️ Email Transporter Error:", err.message);
+  else console.log("✅ Gmail SMTP Verified Successfully");
 });
 
 // =============================
