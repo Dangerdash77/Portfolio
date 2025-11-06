@@ -22,16 +22,15 @@ app.use(express.json());
 // ✅ Dynamic & strict CORS setup
 const allowedOrigins = [
   "https://www.manavkalola.xyz", // live site
-  "https://manavkalola.xyz",     // in case non-www is used
-  "http://127.0.0.1:5500",       // local dev
-  "http://localhost:5500"        // local dev
+  "https://manavkalola.xyz",     // non-www variant
+  "http://127.0.0.1:5500",       // local testing
+  "http://localhost:5500"        // local testing
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow REST tools or server-to-server calls (no Origin header)
-      if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true); // allow REST clients, etc.
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } else {
@@ -51,7 +50,7 @@ async function connectDB() {
   try {
     console.log("⏳ Connecting to MongoDB...");
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 10000, // 10s timeout
+      serverSelectionTimeoutMS: 10000,
     });
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
@@ -68,20 +67,25 @@ mongoose.connection.on("disconnected", () => {
 });
 
 // =============================
-// Nodemailer Setup
+// Nodemailer Setup (Secure Gmail)
 // =============================
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // use TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false, // fixes SSL issues on Render
+  },
 });
 
 // Verify mail setup
-transporter.verify((err) => {
+transporter.verify((err, success) => {
   if (err) console.error("❌ Email Transporter Error:", err.message);
-  else console.log("✅ Email Transporter Ready");
+  else console.log("✅ Email Transporter Ready:", success);
 });
 
 // =============================
@@ -108,7 +112,7 @@ app.post("/api/contact", async (req, res) => {
     await newContact.save();
     console.log("✅ Contact saved to MongoDB");
 
-    // Send email notification
+    // Send email (non-blocking for better UX)
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -116,13 +120,20 @@ app.post("/api/contact", async (req, res) => {
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent successfully");
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("⚠️ Email send failed:", error.message);
+      } else {
+        console.log("✅ Email sent successfully:", info.response);
+      }
+    });
 
-    res.status(200).json({ success: "Message sent successfully!" });
+    res.status(200).json({ success: "Message received successfully!" });
   } catch (err) {
     console.error("❌ ERROR in /api/contact:", err);
-    res.status(500).json({ error: "Internal server error. Please try again later." });
+    res
+      .status(500)
+      .json({ error: "Internal server error. Please try again later." });
   }
 });
 
