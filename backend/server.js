@@ -18,9 +18,27 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 // =============================
 app.use(express.json());
+
+// ✅ Dynamic & strict CORS setup
+const allowedOrigins = [
+  "https://www.manavkalola.xyz", // live site
+  "https://manavkalola.xyz",     // in case non-www is used
+  "http://127.0.0.1:5500",       // local dev
+  "http://localhost:5500"        // local dev
+];
+
 app.use(
   cors({
-    origin: ["https://www.manavkalola.xyz/", "http://localhost:5500"],
+    origin: function (origin, callback) {
+      // Allow REST tools or server-to-server calls (no Origin header)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        console.warn(`❌ CORS blocked request from origin: ${origin}`);
+        return callback(new Error("CORS not allowed for this origin"));
+      }
+    },
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
