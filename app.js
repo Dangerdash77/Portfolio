@@ -19,6 +19,7 @@ class GameDevPortfolio {
         image: "https://images.unsplash.com/photo-1613114926807-b86b1cc42692?auto=format&fit=crop&w=1470&q=80",
         technologies: ["Unreal Engine 5", "Blueprints", "Game Design", "UI/UX", "Level Design", "System Design", "GitHub"],
         category: "Unreal Engine",
+        video: "./Assets/White Rabbit Game Playthrough.mp4"
       },
       {
         id: 2,
@@ -155,6 +156,7 @@ class GameDevPortfolio {
     this.setupModal();
     this.setupContactForm();
     this.setupScrollAnimations();
+    this.setupVideoPopup();
     this.setupBackToTop();
     this.updateYear();
 
@@ -456,16 +458,17 @@ class GameDevPortfolio {
       projectCard.style.animationDelay = `${index * 0.1}s`;
 
       projectCard.innerHTML = `
-        <img src="${project.image}" alt="${project.title}" class="project-image" loading="lazy" 
-             onerror="this.style.background='linear-gradient(45deg, #00f5ff, #32ff32)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.innerHTML='🎮';" />
-        <div class="project-content">
-          <h3 class="project-title">${project.title}</h3>
-          <p class="project-description">${project.description}</p>
-          <div class="project-tech">
-            ${project.technologies.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
-          </div>
-        </div>
-      `;
+  <img src="${project.image}" alt="${project.title}" class="project-image" loading="lazy" />
+  <div class="project-content">
+    <h3 class="project-title">${project.title}</h3>
+    <p class="project-description">${project.description}</p>
+    <div class="project-tech">
+      ${project.technologies.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
+    </div>
+    ${project.video ? `<button class="play-video-btn" data-video="${project.video}">🎬 Play Video</button>` : ""}
+  </div>
+`;
+
 
       // Add click event with better event handling
       projectCard.addEventListener('click', (e) => {
@@ -739,6 +742,40 @@ class GameDevPortfolio {
     // Observe elements for animation
     document.querySelectorAll('.project-card, .skill-category, .contact-info, .contact-form').forEach(el => {
       observer.observe(el);
+    });
+  }
+  // ===============================
+  // Project Video Popup (Inline Player)
+  // ===============================
+  setupVideoPopup() {
+    const modal = document.getElementById("video-modal");
+    const video = document.getElementById("project-video");
+    const closeBtn = document.querySelector(".close-video");
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".play-video-btn");
+      if (btn) {
+        const src = btn.dataset.video;
+        if (src) {
+          video.src = src;
+          modal.style.display = "flex";
+          video.play();
+        }
+      }
+    });
+
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      video.pause();
+      video.src = "";
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+        video.pause();
+        video.src = "";
+      }
     });
   }
 
