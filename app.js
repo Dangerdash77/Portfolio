@@ -672,85 +672,53 @@ class GameDevPortfolio {
 
   // Enhanced Contact Form with proper feedback
   setupContactForm() {
-    const form = document.getElementById('contact-form');
-    if (!form) {
-      console.error('Contact form not found');
-      return;
-    }
+    const form = document.getElementById("contact-form");
+    const status = document.getElementById("form-status");
+    const submitText = document.getElementById("submit-text");
+    const loader = document.getElementById("submit-loader");
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      console.log('Contact form submitted');
+      submitText.classList.add("hidden");
+      loader.classList.remove("hidden");
 
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const submitText = document.getElementById('submit-text');
-      const submitLoader = document.getElementById('submit-loader');
-      const formStatus = document.getElementById('form-status');
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        subject: form.subject.value,
+        message: form.message.value
+      };
 
-      // Show loading state
-      if (submitText) {
-        submitText.classList.add('hidden');
-        console.log('Submit text hidden');
-      }
-      if (submitLoader) {
-        submitLoader.classList.remove('hidden');
-        console.log('Submit loader shown');
-      }
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        console.log('Submit button disabled');
-      }
-
-      // Simulate form submission
       try {
-        console.log('Simulating form submission...');
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        const response = await fetch("http://localhost:5000/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
 
-        // Show success message
-        if (formStatus) {
-          formStatus.textContent = 'Message sent successfully! I\'ll get back to you soon.';
-          formStatus.className = 'form-status success';
-          formStatus.classList.remove('hidden');
-          console.log('Success message shown');
+        const data = await response.json();
+        loader.classList.add("hidden");
+        submitText.classList.remove("hidden");
+
+        if (response.ok) {
+          status.classList.remove("hidden");
+          status.textContent = data.success;
+          status.classList.add("status--success");
+          form.reset();
+        } else {
+          status.classList.remove("hidden");
+          status.textContent = data.error;
+          status.classList.add("status--error");
         }
-
-        form.reset();
-
       } catch (error) {
-        console.error('Form submission error:', error);
-
-        // Show error message
-        if (formStatus) {
-          formStatus.textContent = 'Failed to send message. Please try again.';
-          formStatus.className = 'form-status error';
-          formStatus.classList.remove('hidden');
-        }
-      } finally {
-        // Reset button state
-        if (submitText) {
-          submitText.classList.remove('hidden');
-          console.log('Submit text restored');
-        }
-        if (submitLoader) {
-          submitLoader.classList.add('hidden');
-          console.log('Submit loader hidden');
-        }
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          console.log('Submit button enabled');
-        }
-
-        // Hide status after 5 seconds
-        setTimeout(() => {
-          if (formStatus) {
-            formStatus.classList.add('hidden');
-            console.log('Status message hidden');
-          }
-        }, 5000);
+        console.error("Contact form error:", error);
+        loader.classList.add("hidden");
+        submitText.classList.remove("hidden");
+        status.textContent = "Something went wrong. Try again later.";
+        status.classList.add("status--error");
+        status.classList.remove("hidden");
       }
     });
-
-    console.log('Contact form setup complete');
   }
 
   // Scroll Animations
