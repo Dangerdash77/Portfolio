@@ -5,7 +5,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import Contact from "./models/Contact.js";
 
 // Load environment variables
@@ -51,16 +51,44 @@ async function connectDB() {
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
     console.error("❌ MongoDB Connection Failed:", err.message);
-    console.log("💡 Tip: Check Atlas IP Access List or network");
+    console.log("💡 Check Atlas IP whitelist or network connection");
     setTimeout(connectDB, 5000);
   }
 }
 connectDB();
 
+mongoose.connection.on("disconnected", () => {
+  console.warn("⚠️ MongoDB disconnected! Retrying...");
+  setTimeout(connectDB, 5000);
+});
+
 // =============================
-// Resend Email Setup
+// Gmail SMTP Setup (Nodemailer)
 // =============================
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // use SSL
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS, // use 16-char App Password
+  },
+  tls: {
+    rejectUnauthorized: false, // allow self-signed on local
+  },
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 15000,
+});
+
+// Verify SMTP setup
+transporter.verify((err, success) => {
+  if (err) {
+    console.warn("⚠️ Email Transporter Error:", err.message);
+  } else {
+    console.log("✅ Gmail SMTP Verified Successfully");
+  }
+});
 
 // =============================
 // Routes
@@ -86,17 +114,20 @@ app.post("/api/contact", async (req, res) => {
     await newContact.save();
     console.log("✅ Contact saved to MongoDB");
 
-    // Send Email via Resend API
+    // Send email via Gmail SMTP
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `📩 New Portfolio Message: ${subject}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    };
+
     try {
-      await resend.emails.send({
-        from: "Portfolio <onboarding@resend.dev>",
-        to: process.env.EMAIL_USER,
-        subject: `📩 New Portfolio Message: ${subject}`,
-        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-      });
-      console.log("✅ Email sent successfully via Resend");
-    } catch (mailError) {
-      console.error("⚠️ Email failed via Resend:", mailError.message);
+      console.log("📨 Sending email...");
+      await transporter.sendMail(mailOptions);
+      console.log("✅ Email sent successfully");
+    } catch (emailErr) {
+      console.error("⚠️ Email send failed (non-blocking):", emailErr.message);
     }
 
     res.status(200).json({ success: "Message received successfully!" });
