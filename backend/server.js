@@ -5,7 +5,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import Contact from "./models/Contact.js";
 
 // Load environment variables
@@ -19,24 +19,20 @@ const PORT = process.env.PORT || 5000;
 // =============================
 app.use(express.json());
 
-// ✅ Dynamic & strict CORS setup
 const allowedOrigins = [
-  "https://www.manavkalola.xyz", // live site
-  "https://manavkalola.xyz",     // non-www variant
-  "http://127.0.0.1:5500",       // local testing
-  "http://localhost:5500"        // local testing
+  "https://www.manavkalola.xyz",
+  "https://manavkalola.xyz",
+  "http://127.0.0.1:5500",
+  "http://localhost:5500",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow REST clients, etc.
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        console.warn(`❌ CORS blocked request from origin: ${origin}`);
-        return callback(new Error("CORS not allowed for this origin"));
-      }
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      console.warn(`❌ CORS blocked request from: ${origin}`);
+      return callback(new Error("CORS not allowed for this origin"));
     },
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
@@ -55,38 +51,16 @@ async function connectDB() {
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
     console.error("❌ MongoDB Connection Failed:", err.message);
-    console.log("💡 Tip: Check your network or Atlas IP Access List");
-    setTimeout(connectDB, 5000); // retry after 5s
+    console.log("💡 Tip: Check Atlas IP Access List or network");
+    setTimeout(connectDB, 5000);
   }
 }
 connectDB();
 
-mongoose.connection.on("disconnected", () => {
-  console.warn("⚠️ MongoDB disconnected! Retrying...");
-  setTimeout(connectDB, 5000);
-});
-
 // =============================
-// Nodemailer Setup (Secure Gmail)
+// Resend Email Setup
 // =============================
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // use TLS
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false, // fixes SSL issues on Render
-  },
-});
-
-// Verify mail setup
-transporter.verify((err, success) => {
-  if (err) console.error("❌ Email Transporter Error:", err.message);
-  else console.log("✅ Email Transporter Ready:", success);
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // =============================
 // Routes
@@ -112,28 +86,23 @@ app.post("/api/contact", async (req, res) => {
     await newContact.save();
     console.log("✅ Contact saved to MongoDB");
 
-    // Send email (non-blocking for better UX)
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      subject: `📩 New Portfolio Message: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("⚠️ Email send failed:", error.message);
-      } else {
-        console.log("✅ Email sent successfully:", info.response);
-      }
-    });
+    // Send Email via Resend API
+    try {
+      await resend.emails.send({
+        from: "Portfolio <onboarding@resend.dev>",
+        to: process.env.EMAIL_USER,
+        subject: `📩 New Portfolio Message: ${subject}`,
+        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      });
+      console.log("✅ Email sent successfully via Resend");
+    } catch (mailError) {
+      console.error("⚠️ Email failed via Resend:", mailError.message);
+    }
 
     res.status(200).json({ success: "Message received successfully!" });
   } catch (err) {
     console.error("❌ ERROR in /api/contact:", err);
-    res
-      .status(500)
-      .json({ error: "Internal server error. Please try again later." });
+    res.status(500).json({ error: "Internal server error. Please try again later." });
   }
 });
 
