@@ -1,0 +1,94 @@
+# =============== #
+#   Node / JS     #
+# =============== #
+
+# dependencies
+node_modules/
+jspm_packages/
+
+# npm / yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# build output
+/dist/
+/build/
+out/
+.next/      # if you ever used Next.js
+/.parcel-cache/
+/.cache/
+/.rpt2_cache/
+.rts2_cache_cjs/
+/rts2_cache_es/
+/rts2_cache_umd/
+
+# test / coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# environment variables
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+.env.*
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?p
+*.swo
+
+# OS files
+*.log
+*.tmp
+*.temp
+
+# Other generated / runtime
+*.pid
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+/.pnp.js
+
+
+# =============== #
+#   Misc / Others #
+# =============== #
+
+# static HTML / asset build outputs
+/dist/
+/build/
+/public/build/
+/public/dist/
+
+# coverage reports, logs, cache
+coverage/
+logs/
+*.log
+
+# compiled files / binary outputs
+*.exe
+*.dll
+*.so
+*.dylib
+
+# custom local configs (uncomment if you have)
+# *.local.js
+# *.local.env
