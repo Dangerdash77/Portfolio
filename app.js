@@ -23,13 +23,13 @@ class GameDevPortfolio {
       },
       {
         id: 2,
-        title: "Solar Farm Locator",
-        description: "A MERN-based web app that fetches real-time solar irradiance data using multiple APIs. Helps users locate optimal regions for solar installations by entering city names or coordinates.",
-        image: './Assets/Solarfarmlocator.png',
-        technologies: ["JavaScript", "HTML", "CSS", "API", "React", "Node"],
-        category: "Web development",
-        github: "https://github.com/Dangerdash77/Solar-Farm-Locator",
-        live: "https://solar-farm-locator-1.onrender.com/"
+        title: "Hole.io Style Game",
+        description: "Hyper-casual mobile game with real-time object absorption, scaling mechanics, and progression system. Built using Unity with focus on gameplay systems and monetization.",
+        image: "./Assets/holeio.png", // add your image
+        technologies: ["Unity", "C#", "Game Physics", "AdMob", "Mobile Optimization"],
+        category: "Unity",
+        github: "", // add if available
+        live: "" // or gameplay video if you have
       },
       {
         id: 3,
@@ -92,6 +92,16 @@ class GameDevPortfolio {
         image: "https://images.unsplash.com/photo-1581090129431-75b42bafc218?auto=format&fit=crop&w=1470&q=80",
         technologies: ["Unreal Engine 5", "C++", "3D modeling"],
         category: "Unreal Engine"
+      },
+      {
+        id: 10,
+        title: "Solar Farm Locator",
+        description: "A MERN-based web app that fetches real-time solar irradiance data using multiple APIs. Helps users locate optimal regions for solar installations by entering city names or coordinates.",
+        image: './Assets/Solarfarmlocator.png',
+        technologies: ["JavaScript", "HTML", "CSS", "API", "React", "Node"],
+        category: "Web development",
+        github: "https://github.com/Dangerdash77/Solar-Farm-Locator",
+        live: "https://solar-farm-locator-1.onrender.com/"
       },
     ];
 
@@ -744,56 +754,56 @@ class GameDevPortfolio {
       observer.observe(el);
     });
   }
-setupVideoPopup() {
-  const modal = document.getElementById("video-modal");
-  const closeBtn = document.querySelector(".close-video");
-  const videoContainer = modal?.querySelector(".video-content");
+  setupVideoPopup() {
+    const modal = document.getElementById("video-modal");
+    const closeBtn = document.querySelector(".close-video");
+    const videoContainer = modal?.querySelector(".video-content");
 
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".play-video-btn");
-    if (!btn || !videoContainer) return;
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".play-video-btn");
+      if (!btn || !videoContainer) return;
 
-    const src = btn.dataset.video;
-    if (!src) return;
+      const src = btn.dataset.video;
+      if (!src) return;
 
-    // Clear any previous iframe
-    videoContainer.innerHTML = "";
+      // Clear any previous iframe
+      videoContainer.innerHTML = "";
 
-    if (src.includes("drive.google.com")) {
-      const previewUrl = src.includes("/preview")
-        ? src
-        : src.replace("/view", "/preview");
-      const iframe = document.createElement("iframe");
-      iframe.src = previewUrl;
-      iframe.width = "100%";
-      iframe.height = "480";
-      iframe.allow = "autoplay";
-      iframe.style.border = "none";
-      videoContainer.appendChild(iframe);
-    } else {
-      const video = document.createElement("video");
-      video.src = src;
-      video.controls = true;
-      video.autoplay = true;
-      video.style.width = "100%";
-      videoContainer.appendChild(video);
-    }
+      if (src.includes("drive.google.com")) {
+        const previewUrl = src.includes("/preview")
+          ? src
+          : src.replace("/view", "/preview");
+        const iframe = document.createElement("iframe");
+        iframe.src = previewUrl;
+        iframe.width = "100%";
+        iframe.height = "480";
+        iframe.allow = "autoplay";
+        iframe.style.border = "none";
+        videoContainer.appendChild(iframe);
+      } else {
+        const video = document.createElement("video");
+        video.src = src;
+        video.controls = true;
+        video.autoplay = true;
+        video.style.width = "100%";
+        videoContainer.appendChild(video);
+      }
 
-    modal.style.display = "flex";
-  });
+      modal.style.display = "flex";
+    });
 
-  closeBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-    if (videoContainer) videoContainer.innerHTML = "";
-  });
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
+    closeBtn.addEventListener("click", () => {
       modal.style.display = "none";
       if (videoContainer) videoContainer.innerHTML = "";
-    }
-  });
-}
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+        if (videoContainer) videoContainer.innerHTML = "";
+      }
+    });
+  }
 
   // Back to Top
   setupBackToTop() {
